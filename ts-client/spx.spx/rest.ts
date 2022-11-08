@@ -25,6 +25,10 @@ export interface RpcStatus {
  */
 export type SpxParams = object;
 
+export interface SpxQueryHelloResponse {
+  text?: string;
+}
+
 /**
  * QueryParamsResponse is response type for the Query/Params RPC method.
  */
@@ -158,6 +162,22 @@ export class HttpClient<SecurityDataType = unknown> {
  * @version version not set
  */
 export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryHello
+   * @summary Queries a list of Hello items.
+   * @request GET:/spx/spx/hello
+   */
+  queryHello = (params: RequestParams = {}) =>
+    this.request<SpxQueryHelloResponse, RpcStatus>({
+      path: `/spx/spx/hello`,
+      method: "GET",
+      format: "json",
+      ...params,
+    });
+
   /**
    * No description
    *

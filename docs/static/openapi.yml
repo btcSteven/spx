@@ -44308,6 +44308,38 @@ paths:
           format: uint64
       tags:
         - Query
+  /spx/spx/hello:
+    get:
+      summary: Queries a list of Hello items.
+      operationId: SpxSpxHello
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              text:
+                type: string
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      tags:
+        - Query
   /spx/spx/params:
     get:
       summary: Parameters queries the parameters of the module.
@@ -73732,6 +73764,11 @@ definitions:
   spx.spx.Params:
     type: object
     description: Params defines the parameters for the module.
+  spx.spx.QueryHelloResponse:
+    type: object
+    properties:
+      text:
+        type: string
   spx.spx.QueryParamsResponse:
     type: object
     properties:

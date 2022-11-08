@@ -14,6 +14,13 @@ export interface QueryParamsResponse {
   params: Params | undefined;
 }
 
+export interface QueryHelloRequest {
+}
+
+export interface QueryHelloResponse {
+  text: string;
+}
+
 function createBaseQueryParamsRequest(): QueryParamsRequest {
   return {};
 }
@@ -102,10 +109,98 @@ export const QueryParamsResponse = {
   },
 };
 
+function createBaseQueryHelloRequest(): QueryHelloRequest {
+  return {};
+}
+
+export const QueryHelloRequest = {
+  encode(_: QueryHelloRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryHelloRequest {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryHelloRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(_: any): QueryHelloRequest {
+    return {};
+  },
+
+  toJSON(_: QueryHelloRequest): unknown {
+    const obj: any = {};
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<QueryHelloRequest>, I>>(_: I): QueryHelloRequest {
+    const message = createBaseQueryHelloRequest();
+    return message;
+  },
+};
+
+function createBaseQueryHelloResponse(): QueryHelloResponse {
+  return { text: "" };
+}
+
+export const QueryHelloResponse = {
+  encode(message: QueryHelloResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.text !== "") {
+      writer.uint32(10).string(message.text);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryHelloResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryHelloResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.text = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryHelloResponse {
+    return { text: isSet(object.text) ? String(object.text) : "" };
+  },
+
+  toJSON(message: QueryHelloResponse): unknown {
+    const obj: any = {};
+    message.text !== undefined && (obj.text = message.text);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<QueryHelloResponse>, I>>(object: I): QueryHelloResponse {
+    const message = createBaseQueryHelloResponse();
+    message.text = object.text ?? "";
+    return message;
+  },
+};
+
 /** Query defines the gRPC querier service. */
 export interface Query {
   /** Parameters queries the parameters of the module. */
   Params(request: QueryParamsRequest): Promise<QueryParamsResponse>;
+  /** Queries a list of Hello items. */
+  Hello(request: QueryHelloRequest): Promise<QueryHelloResponse>;
 }
 
 export class QueryClientImpl implements Query {
@@ -113,11 +208,18 @@ export class QueryClientImpl implements Query {
   constructor(rpc: Rpc) {
     this.rpc = rpc;
     this.Params = this.Params.bind(this);
+    this.Hello = this.Hello.bind(this);
   }
   Params(request: QueryParamsRequest): Promise<QueryParamsResponse> {
     const data = QueryParamsRequest.encode(request).finish();
     const promise = this.rpc.request("spx.spx.Query", "Params", data);
     return promise.then((data) => QueryParamsResponse.decode(new _m0.Reader(data)));
+  }
+
+  Hello(request: QueryHelloRequest): Promise<QueryHelloResponse> {
+    const data = QueryHelloRequest.encode(request).finish();
+    const promise = this.rpc.request("spx.spx.Query", "Hello", data);
+    return promise.then((data) => QueryHelloResponse.decode(new _m0.Reader(data)));
   }
 }
 

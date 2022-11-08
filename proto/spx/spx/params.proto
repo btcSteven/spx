@@ -1,0 +1,12 @@
+syntax = "proto3";
+package spx.spx;
+
+import "gogoproto/gogo.proto";
+
+option go_package = "spx/x/spx/types";
+
+// Params defines the parameters for the module.
+message Params {
+  option (gogoproto.goproto_stringer) = false;
+  
+}
